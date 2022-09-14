@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Color Ball Multiplayer - Zeyo Klotski</title>
+    <style>
+        body {
+            background-color: #fafafc;
+            color: #3a3b3c;
+        }
+
+        .mainShow {
+            position: relative;
+            width: 100%;
+            margin-top: 30px;
+            text-align: center;
+            min-width: 400px;
+        }
+
+        .mainTitle {
+            margin-bottom: 0;
+            font-size: 42px;
+            font-weight: 300;
+        }
+
+        .subTitle {
+            margin-top: 8px;
+            font-size: 18px;
+            font-weight: 300;
+        }
+
+        .timeShowBox {
+            margin-top: 8px;
+            font-size: 18px;
+            font-weight: 300;
+            font-family: Consolas;
+        }
+
+        .gameBack {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            background: url(./imgs/back.png) no-repeat;
+            background-size: 100% 100%;
+            z-index: -20;
+        }
+
+        .gameRow::after {
+            content: "";
+            clear: both;
+        }
+
+        .gameGrid {
+            margin: 20px;
+            float: left;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            user-select: none;
+        }
+
+        .red {
+            background-color: #db2828;
+        }
+
+        .green {
+            background-color: #47af50;
+        }
+
+        .blue {
+            background-color: #2185d0;
+        }
+
+        .orange {
+            background-color: #aaaaaa;
+        }
+
+        .violet {
+            background-color: #fbbd08;
+        }
+
+
+        .gameTable:not(:first-child) {
+            margin-left: 80px;
+        }
+
+        .gameTable {
+            position: relative;
+            float: left;
+        }
+
+        .mask {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            color: #2b2b2b;
+            font-size: 50px;
+            line-height: 369px;
+            background-color: rgba(250, 250, 250, .92);
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transition: opacity .2s;
+            user-select: none;
+            z-index: 300;
+        }
+
+        .choserRow,
+        .choserCol {
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            background-color: #666;
+            transform: rotateZ(45deg);
+            transition: all .2s;
+        }
+
+        .choserCol {
+            bottom: -25px;
+            left: 25px;
+        }
+
+        .choserRow {
+            left: -25px;
+            top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mainShow">
+        <h1 class="mainTitle">Color Ball Multiplayer</h1>
+        <h3 class="subTitle" id="infoShow">Press G to Start <span style="color: #db2828">New</span>, P to Pause or
+            Continue</span>
+        </h3>
+        <h3 class="timeShowBox">USE:<span id="timeUsed">00:00:00</span></h3>
+        <div style="display: inline-block; position: relative;">
+            <div class="gameTable">
+                <div class="gameBack"></div>
+                <div class="choserRow" id="choserRow1"></div>
+                <div class="choserCol" id="choserCol1"></div>
+                <div class="mask" id="mask1">PAUSE</div>
+                <div class="gameRow">
+                    <div class="gameGrid red"></div>
+                    <div class="gameGrid red"></div>
+                    <div class="gameGrid red"></div>
+                    <div class="gameGrid red"></div>
+                    <div class="gameGrid red"></div>
+                </div>
+                <div class="gameRow">
+                    <div class="gameGrid blue"></div>
+                    <div class="gameGrid blue"></div>
+                    <div class="gameGrid blue"></div>
+                    <div class="gameGrid blue"></div>
+                    <div class="gameGrid blue"></div>
+                </div>
+                <div class="gameRow">
+                    <div class="gameGrid green"></div>
+                    <div class="gameGrid green"></div>
+                    <div class="gameGrid green"></div>
+                    <div class="gameGrid green"></div>
+                    <div class="gameGrid green"></div>
+                </div>
+                <div class="gameRow">
+                    <div class="gameGrid violet"></div>
+                    <div class="gameGrid violet"></div>
+                    <div class="gameGrid violet"></div>
+                    <div class="gameGrid violet"></div>
+                    <div class="gameGrid violet"></div>
+                </div>
+                <div class="gameRow">
+                    <div class="gameGrid orange"></div>
+                    <div class="gameGrid orange"></div>
+                    <div class="gameGrid orange"></div>
+                    <div class="gameGrid orange"></div>
+                    <div class="gameGrid orange"></div>
+                </div>
+            </div>
+            <div class="gameTable">
+                <div class="gameBack"></div>
+                <div class="choserRow" id="choserRow2"></div>
+                <div class="choserCol" id="choserCol2"></div>
+                <div class="mask" id="mask2">PAUSE</div>
+                <div class="gameRow">
+                    <div class="gameGrid red"></div>
+                    <div class="gameGrid red"></div>
+                    <div class="gameGrid red"></div>
+                    <div class="gameGrid red"></div>
+                    <div class="gameGrid red"></div>
+                </div>
+                <div class="gameRow">
+                    <div class="gameGrid blue"></div>
+                    <div class="gameGrid blue"></div>
+                    <div class="gameGrid blue"></div>
+                    <div class="gameGrid blue"></div>
+                    <div class="gameGrid blue"></div>
+                </div>
+                <div class="gameRow">
+                    <div class="gameGrid green"></div>
+                    <div class="gameGrid green"></div>
+                    <div class="gameGrid green"></div>
+                    <div class="gameGrid green"></div>
+                    <div class="gameGrid green"></div>
+                </div>
+                <div class="gameRow">
+                    <div class="gameGrid violet"></div>
+                    <div class="gameGrid violet"></div>
+                    <div class="gameGrid violet"></div>
+                    <div class="gameGrid violet"></div>
+                    <div class="gameGrid violet"></div>
+                </div>
+                <div class="gameRow">
+                    <div class="gameGrid orange"></div>
+                    <div class="gameGrid orange"></div>
+                    <div class="gameGrid orange"></div>
+                    <div class="gameGrid orange"></div>
+                    <div class="gameGrid orange"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let colors = ["red", "blue", "green", "violet", "orange"]
+        let eles = document.getElementsByClassName("gameGrid")
+        let info = document.getElementById("infoShow")
+        let tu = document.getElementById("timeUsed")
+        let mask = [
+            document.getElementById("mask1"),
+            document.getElementById("mask2")
+        ]
+        let choserCol = [
+            document.getElementById("choserCol1"),
+            document.getElementById("choserCol2")
+        ],
+            choserRow = [
+                document.getElementById("choserRow1"),
+                document.getElementById("choserRow2")
+            ]
+        let blockInfo = [
+            [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4],
+            [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4]
+        ]
+        let timerCount = 0,
+            nowChoose = [0, 0],
+            timer = "Zeyo Klotski",
+            paused = false
+
+        function changeChoose(k, delta) {
+            nowChoose[k] = ((nowChoose[k] + delta) % 5 + 5) % 5
+            choserCol[k].style.left = (25 + nowChoose[k] * 70) + "px"
+            choserRow[k].style.top = (25 + nowChoose[k] * 70) + "px"
+        }
+
+        function numToXY(k) {
+            return [Math.floor((k - 1) / 5), (k - 1) % 5]
+        }
+
+        function XYToNum(x, y) {
+            return x * 4 + y
+        }
+
+        function setBlock(id, col) {
+            //console.log(id, col)
+            for (let i = 0; i < 5; ++i)
+                eles[id].classList.remove(colors[i])
+            eles[id].classList.add(colors[col])
+        }
+
+        function returnBack(k = 3) {
+            if (k & 1)
+                blockInfo[0] = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4]
+            if (k & 2)
+                blockInfo[1] = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4]
+            for (let i = 0; i < 25; ++i) {
+                if (k & 1) setBlock(i, blockInfo[0][i])
+                if (k & 2) setBlock(i + 25, blockInfo[1][i])
+            }
+        }
+
+        function judge(k) {
+            let flag = true
+            for (let i = 0; i < 5; ++i) {
+                let bs = blockInfo[k][i * 5]
+                for (let j = 1; j < 5; ++j)
+                    if (blockInfo[k][i * 5 + j] != bs) {
+                        flag = false
+                        break
+                    }
+                if (!flag)
+                    break
+            }
+            return flag
+        }
+
+        function move(k, fx, id, flag = true) {
+            //console.log(k)
+            let tl
+            if (fx == 1) {
+                tl = [5 * id, 5 * id + 1, 5 * id + 2, 5 * id + 3, 5 * id + 4]
+            }
+            else if (fx == 2) {
+                tl = [5 * id + 4, 5 * id + 3, 5 * id + 2, 5 * id + 1, 5 * id]
+            }
+            else if (fx == 3) {
+                tl = [id, id + 5, id + 10, id + 15, id + 20]
+            }
+            else if (fx == 4) {
+                tl = [id + 20, id + 15, id + 10, id + 5, id]
+            }
+            //console.log(tl)
+            let t = blockInfo[k][tl[0]]
+            for (let i = 0; i < 4; ++i)
+                blockInfo[k][tl[i]] = blockInfo[k][tl[i + 1]]
+            blockInfo[k][tl[4]] = t
+            //console.log(blockInfo)
+            for (let i = 0; i < 5; ++i)
+                setBlock(tl[i] + k * 25, blockInfo[k][tl[i]])
+            if (flag && judge(k)) {
+                clearInterval(timer)
+                timer = "Zeyo Klotski"
+                mask[0].style.opacity = "1"
+                mask[1].style.opacity = "1"
+                mask[k].innerText = "You Win!"
+                mask[1 - k].innerText = "You Lose!"
+            }
+        }
+
+        function timeParser(e) {
+            let mn = Math.floor(e / 6000)
+            if (mn < 10)
+                mn = "0" + mn.toString()
+            else
+                mn = mn.toString()
+            let sc = Math.floor(e / 100) % 60
+            if (sc < 10)
+                sc = "0" + sc.toString()
+            else
+                sc = sc.toString()
+            let msc = e % 100
+            if (msc < 10)
+                msc = "0" + msc.toString()
+            else
+                msc = msc.toString()
+            return [mn, sc, msc]
+        }
+
+        function timeCountFun() {
+            timerCount += 10
+            let dpl = timeParser(timerCount)
+            tu.innerText = dpl[0] + ":" + dpl[1] + ":" + dpl[2]
+        }
+
+        let isStarting = false
+
+        function startGame() {
+            if (isStarting)
+                return
+            isStarting = true
+            timerCount = 0
+            mask[0].style.opacity = "1"
+            mask[1].style.opacity = "1"
+            startTimeCount = 3
+            mask[0].innerText = startTimeCount
+            mask[1].innerText = startTimeCount
+            if (timer != "Zeyo Klotski") {
+                clearInterval(timer)
+            }
+            startTimer = setInterval(function () {
+                startTimeCount -= 1
+                if (startTimeCount <= 0) {
+                    isStarting = false
+                    timer = setInterval(timeCountFun, 100)
+                    returnBack()
+                    changeChoose(0, -nowChoose[0])
+                    changeChoose(1, -nowChoose[0])
+                    returnBack()
+                    for (let i = 0; i < 100; ++i) {
+                        let p1 = Math.floor(Math.random() * 4) + 1
+                        let p2 = Math.floor(Math.random() * 5)
+                        move(0, p1, p2, false)
+                        move(1, p1, p2, false)
+                    }
+                    if (timer != "Zeyo Klotski") {
+                        clearInterval(timer)
+                    }
+                    timer = setInterval(timeCountFun, 100)
+                    mask[0].style.opacity = "0"
+                    mask[1].style.opacity = "0"
+                    clearInterval(startTimer)
+                }
+                mask[0].innerText = startTimeCount
+                mask[1].innerText = startTimeCount
+            }, 1000)
+        }
+
+        document.addEventListener("keydown", function (e) {
+            //console.log(e)
+            if (e.code === "KeyG") {
+                startGame()
+            }
+            if (timer != "Zeyo Klotski") {
+                if (e.code == "KeyW" || e.code == "KeyA")
+                    changeChoose(0, -1)
+                else if (e.code == "ArrowUp" || e.code == "ArrowLeft")
+                    changeChoose(1, -1)
+                else if (e.code == "KeyS" || e.code == "KeyD")
+                    changeChoose(0, 1)
+                else if (e.code == "ArrowRight" || e.code == "ArrowDown")
+                    changeChoose(1, 1)
+                else if (e.code == "KeyI")
+                    move(0, 3, nowChoose[0])
+                else if (e.code == "Numpad5")
+                    move(1, 3, nowChoose[1])
+                else if (e.code == "KeyJ")
+                    move(0, 1, nowChoose[0])
+                else if (e.code == "Numpad1")
+                    move(1, 1, nowChoose[1])
+                else if (e.code == "KeyK")
+                    move(0, 4, nowChoose[0])
+                else if (e.code == "Numpad2")
+                    move(1, 4, nowChoose[1])
+                else if (e.code == "KeyL")
+                    move(0, 2, nowChoose[0])
+                else if (e.code == "Numpad3")
+                    move(1, 2, nowChoose[1])
+            }
+        })
+    </script>
+    <script src="../copyright.js"></script>
+</body>
+
+</html>

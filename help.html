@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Zeyo Klotski</title>
+    <style>
+        body {
+            background-color: #fafafc;
+            color: #3a3b3c;
+        }
+        
+        .mainShow {
+            width: 100%;
+            margin-top: 20px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity .5s;
+        }
+        
+        .mainTitle {
+            font-size: 42px;
+            font-weight: 300;
+        }
+        
+        .buttons button {
+            border: none;
+            border-radius: 0;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #fff;
+            color: #666;
+            cursor: pointer;
+            transition: all .2s;
+        }
+        
+        .buttons button:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
+        }
+        
+        button.start {
+            background-color: #41a5f0;
+            color: #fcfcfc;
+        }
+        
+        .buttons button:not(:first-child) {
+            margin-left: 50px;
+        }
+        
+        .mainHelp {
+            width: 600px;
+            margin: 40px auto;
+        }
+        
+        .mainHelp h3 {
+            margin-bottom: 5px;
+            font-weight: 300;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mainShow" id="mainShow">
+        <h1 class="mainTitle">Zeyo Klotski</h1>
+        <div class="buttons">
+            <button class="start" onclick="location.href='./pages/game.html'">Start</button>
+            <button onclick="location.href='./index.html'">Return</button>
+        </div>
+    </div>
+    <div class="mainHelp">
+        <h3>What's Klotski?</h3>
+        <p>This game is called Digital Klotski. Digital Klotski is to use as few steps as possible, as short as possible time, the number of squares on the board, according to the order from left to right, from top to bottom to rearrange neatly.</p>
+        <h3>How can I play the game?</h3>
+        <p>There're two modes, single player and double players. Enter the game, you can use WASD or the arrow key to control the numbers(In single mode, both are OK while multiplayer mode control one side).</p>
+    </div>
+    <script>
+        window.onload = function() {
+            document.getElementById("mainShow").style.opacity = "1"
+        }
+    </script>
+    <script src="copyright.js"></script>
+</body>
+
+</html>
