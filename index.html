@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <title>Zeyo Klotski</title>
+    <style>
+        :root {
+            --black: #222324;
+            --light-black: #454445;
+            --blue: #1780db;
+            --light-blue: #37a0fb;
+            --grey: #888;
+            --white: #fff;
+            --light-grey: #ccc;
+            --shadow1: 0 2px 6px rgb(0 0 0 / 12%), 0 -1px 3px rgb(0 0 0 / 7%);
+            --shadow2: 0 5px 15px rgb(0 0 0 / 12%), 0 -5px 12px rgb(0 0 0 / 7%);
+        }
+
+        body {
+            background-color: #fcfeff;
+        }
+
+        .zeyo-main {
+            width: 100%;
+            max-width: 768px;
+            margin: 60px auto;
+        }
+
+        .zeyo-title {
+            font-family: sans-serif;
+            font-weight: 300;
+            font-size: 48px;
+        }
+
+        .zeyo-title-description {
+            font-size: 32px;
+            color: var(--grey);
+        }
+
+        .zeyo-field:not(:nth-of-type(1)) {
+            margin-top: 30px;
+        }
+
+        .zeyo-field-title-text {
+            display: block;
+            position: relative;
+            font-family: sans-serif;
+            font-weight: 300;
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        .zeyo-field-title-text span {
+            margin-left: 60px;
+            background-color: #fcfeff;
+            padding: 0 5px;
+        }
+
+        .zeyo-field-title-text:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 1%;
+            right: 1%;
+            background-color: var(--light-grey);
+            height: 1px;
+            z-index: -1;
+        }
+
+        .zeyo-list {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .zeyo-option-button {
+            display: block;
+            position: relative;
+            padding: 8px 24px;
+            text-decoration: none;
+            width: 30%;
+            margin-right: 3.3333%;
+            margin-bottom: 16px;
+            color: var(--light-black);
+            background-color: transparent;
+            box-shadow: var(--shadow1);
+            box-sizing: border-box;
+            user-select: none;
+            transition: all .2s ease-in-out;
+        }
+
+        .zeyo-option-button:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            background-color: var(--light-blue);
+            z-index: -1;
+            transition: all .2s ease-in-out;
+        }
+
+        .zeyo-option-button:hover:before {
+            width: 100%;
+        }
+
+        .zeyo-option-button:hover {
+            color: var(--white);
+            box-shadow: var(--shadow2);
+        }
+
+        @media (max-width: 798px) {
+
+            .zeyo-main {
+                width: 90%;
+            }
+
+            .zeyo-option-button {
+                width: 46%;
+                margin-right: 4%;
+            }
+        }
+
+        @media (max-width: 498px) {
+            .zeyo-main {
+                width: 95%;
+            }
+
+            .zeyo-option-button {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="zeyo-main">
+        <h1 class="zeyo-title">Zeyo Klotski
+            <span class="zeyo-title-description">V2</span>
+        </h1>
+        <div class="zeyo-field">
+            <div class="zeyo-field-title">
+                <div class="zeyo-field-title-text">
+                    <span>Single Player</span>
+                </div>
+            </div>
+        </div>
+        <div class="zeyo-list">
+            <a href="./game/single/classic.html" class="zeyo-option-button">Classic 4×4</a>
+            <a href="./game/single/mist.html" class="zeyo-option-button">Mist 3×3</a>
+            <a href="./game/single/color.html" class="zeyo-option-button">Color Ball 5×5</a>
+        </div>
+        <div class="zeyo-field">
+            <div class="zeyo-field-title">
+                <div class="zeyo-field-title-text">
+                    <span>Multiple Players</span>
+                </div>
+            </div>
+        </div>
+        <div class="zeyo-list">
+            <a href="./game/multi/classic.html" class="zeyo-option-button">Classic 4×4</a>
+            <a href="./game/multi/mist.html" class="zeyo-option-button">Mist 3×3</a>
+            <a href="./game/multi/mist-old.html" class="zeyo-option-button">Mist(Classic) 3×3</a>
+            <a href="./game/multi/chaos.html" class="zeyo-option-button">Chaos 3×3</a>
+            <a href="./game/multi/color.html" class="zeyo-option-button">Color Ball 5×5</a>
+        </div>
+    </div>
+</body>
+
+</html>

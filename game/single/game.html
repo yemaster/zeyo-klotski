@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Zeyo Klotski</title>
+    <style>
+        body {
+            background-color: #fafafc;
+            color: #3a3b3c;
+        }
+        
+        .mainShow {
+            width: 100%;
+            margin-top: 120px;
+            text-align: center;
+        }
+        
+        .mainTitle {
+            font-size: 72px;
+            font-weight: 300;
+        }
+        
+        button {
+            position: relative;
+            margin-bottom: 10px;
+            width: 300px;
+            border: none;
+            border-radius: 0;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: transparent;
+            color: #666;
+            cursor: pointer;
+            transition: all .2s;
+        }
+        
+        button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 300px;
+            background-color: #41a5f0;
+            transition: right .2s;
+            z-index: -1;
+        }
+        
+        button:disabled {
+            cursor: auto;
+        }
+        
+        button:disabled::after {
+            background-color: #aaa;
+        }
+        
+        button:hover {
+            color: #fcfcfc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
+        }
+        
+        button:hover::after {
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mainShow">
+        <h1 class="mainTitle">Zeyo Klotski</h1>
+        <button onclick="location.href='./single.html'">Single Player</button><br>
+        <button onclick="location.href='./multiplay.html'"> Multiplayer</button><br>
+        <button onclick="location.href='../index.html'">Return</button>
+    </div>
+    <script src="../copyright.js"></script>
+</body>
+
+</html>

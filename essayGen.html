@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--Driven by Powerful vtui beta-->
+    <meta charset="utf-8">
+    <title>Essay Generator</title>
+    <style>
+        :root {
+            --black: #222324;
+            --light-black: #454445;
+            --blue: #1780db;
+            --light-blue: #37a0fb;
+            --grey: #888;
+            --white: #fff;
+            --light-grey: #ccc;
+            --shadow1: 0 2px 6px rgb(0 0 0 / 12%), 0 -1px 3px rgb(0 0 0 / 7%);
+            --shadow2: 0 5px 15px rgb(0 0 0 / 12%), 0 -5px 12px rgb(0 0 0 / 7%);
+        }
+
+        body {
+            background-color: #fcfeff;
+        }
+
+        .eg-main {
+            width: 100%;
+            max-width: 768px;
+            margin: 60px auto;
+        }
+
+        .eg-title {
+            font-family: sans-serif;
+            font-weight: 300;
+            font-size: 42px;
+        }
+
+        .eg-title-description {
+            font-size: 24px;
+            color: var(--grey);
+        }
+
+        .eg-field:not(.first) {
+            margin-top: 30px;
+        }
+
+        .eg-field-title-text {
+            display: block;
+            position: relative;
+            font-family: sans-serif;
+            font-weight: 300;
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        .eg-field-title-text span {
+            margin-left: 60px;
+            background-color: #fcfeff;
+            padding: 0 5px;
+        }
+
+        .eg-field-title-text:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 1%;
+            right: 1%;
+            background-color: var(--light-grey);
+            height: 1px;
+            z-index: -1;
+        }
+
+        input {
+            border: 1px solid var(--grey);
+            outline: none;
+            padding: 8px 12px;
+            width: 100%;
+            max-width: 328px;
+            transition: all .2s ease-in-out;
+        }
+
+        input:hover,
+        input:focus {
+            border-color: var(--blue);
+        }
+
+        .eg-input-group {
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .eg-button {
+            display: inline;
+            background-color: var(--blue);
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 8px 12px;
+            transition: all .2s;
+        }
+
+        .eg-button:hover {
+            background-color: var(--light-blue);
+        }
+
+        #result-container {
+            display: none;
+            font-family: "Times new roman";
+        }
+
+        #result h2 {
+            font-weight: 300;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="eg-main">
+        <h1 class="eg-title">Essay Generator
+            <span class="eg-title-description">Generate the fk essay.</span>
+        </h1>
+        <span style="color: #db2828">Please do not use this article for formal purposes!</span>
+        <div class="eg-field">
+            <div class="eg-field-title">
+                <div class="eg-field-title-text">
+                    <span>Settings</span>
+                </div>
+            </div>
+        </div>
+        <div class="eg-input-group">
+            Topic:
+            <input id="topic" placeholder="Topic(Optional)">
+        </div>
+        <div class="eg-input-group">
+            Words:
+            <input id="words" type="number" placeholder="Words" value="500" readonly>
+        </div>
+        <div class="eg-input-group">
+            <div class="eg-button" id="gen-button">Generate!</div>
+        </div>
+        <div id="result-container">
+            <div class="eg-field">
+                <div class="eg-field-title">
+                    <div class="eg-field-title-text">
+                        <span>Result</span>
+                    </div>
+                </div>
+            </div>
+            <div id="result"></div>
+        </div>
+    </div>
+    <script>
+        let resultContainer = document.getElementById("result-container")
+        let genButton = document.getElementById("gen-button")
+        let result = document.getElementById("result")
+        let names1 = ["baby", "bear", "bird", "boy", "bunny", "cat", "caterpillar", "chicken", "cow", "dino", "dog", "dragon", "duck", "family", "fox", "frog", "ghost", "girl", "goat", "kid", "king", "kitten", "lion", "little bird", "little boy", "little dragon", "little duck", "little girl", "little prince", "little princess", "man", "mouse", "owl", "pig", "prince", "princess", "puppy", "queen", "rabbit", "sheep", "snowman", "tiger", "toad", "wizard", "woman"];
+        let names2 = ["babies", "bears", "birds", "boys", "bunnies", "cats", "chickens", "cows", "dinos", "dogs", "dragons", "ducks", "foxes", "frogs", "ghosts", "girls", "goats", "kids", "kings", "kittens", "lions", "little birds", "little dragons", "little ducks", "mice", "owls", "pigs", "puppies", "rabbits", "sheep", "tigers", "toads", "wizards"];
+        let names3 = ["adventure", "airplane", "attic", "basement", "bed", "candle", "car", "chair", "chimney", "city", "closet", "coat", "country", "cup", "curiosity", "day", "door", "field", "flower", "forest", "hat", "home", "house", "lantern", "light", "mirror", "mountain", "pocket", "river", "roof", "sands", "shield", "statue", "stories", "story", "tale", "tales", "town", "train", "tree", "wand", "watch", "water", "week", "window"];
+        let names4 = ["in my house", "in my school", "in my town", "in space", "in the forest", "in the mountains", "in the river", "of dreams", "of excelsior", "of fantasia", "of fantasy", "of fire", "of gold", "of life", "of magic", "of miracles", "of my country", "of my dreams", "of my house", "of my imagination", "of my land", "of mysteries", "of mystery", "of puzzles", "of rain", "of rainbows", "of riddles", "of secrets", "of silver", "of stone", "of sunshine", "of the moon", "of the stars", "of the sun", "of tomorrow", "of utopia", "of wonder", "of wood", "of yesterday", "on the moon"];
+        let names5 = ["a day with", "adventure of", "afraid of", "amazing life of", "amazing world of", "back to", "back with", "bewitched by", "boring at", "brave at", "bubble of", "careful with", "caring for", "celebrating with", "cleaning at", "cleaning with", "clumsy at", "colors of", "cooking with", "cool at", "crafting with", "crazy at", "crazy with", "cute with", "drawing with", "enchanted by", "fearless with", "foolish with", "free with", "gift from", "gift of", "giving with", "growing up with", "growing with", "happy with", "helping", "jealous of", "jumping with", "learning with", "living with", "love of", "loved by", "playing with", "present from", "present of", "puzzling with", "reading with"];
+        let names6 = ["fantasy", "flowers", "leaves", "magic", "my best friend", "my brother", "my cat", "my cousin", "my dad", "my dog", "my family", "my father", "my fish", "my friend", "my home", "my house", "my imagination", "my mom", "my mother", "my neighbor", "my neighbors", "my nephew", "my new cat", "my new clothes", "my new dog", "my new fish", "my new pet", "my niece", "my pet", "my pet dragon", "my school", "my sister", "my town", "my village", "petals", "sticks", "the animals", "the doctor", "the fields", "the forest", "the hospital", "the mountains", "the neighbor", "the neighbors", "the river", "the school", "the town", "water"];
+        let names7 = ["of darkness", "of dawn", "of desire", "of despair", "of destruction", "of dread", "of dreams", "of dusk", "of earth", "of eternity", "of fire", "of fortune", "of freedom", "of glory", "of gold", "of greatness", "of heaven", "of hell", "of history", "of hope", "of insanity", "of joy", "of my imagination", "of next year", "of nightmares", "of perfection", "of power", "of rainbows", "of reality", "of silver", "of sorrow", "of stone", "of the ancestors", "of the ancients", "of the banished", "of the curse", "of the day", "of the east", "of the eclipse", "of the end", "of the eternal", "of the forest", "of the forsaken", "of the frontline", "of the gods", "of the great", "of the land", "of the light", "of the lost ones", "of the mountain", "of the nation", "of the night", "of the north", "of the ocean", "of the plague", "of the prison", "of the river", "of the sea", "of the solstice", "of the south", "of the stars", "of the stockades", "of the void", "of the west", "of the world", "of time", "of tomorrow", "of twilight", "of utopia", "of water", "of wind", "of wood", "of yesterday", "with a goal", "with determination", "with gold", "with honor", "with immortality", "with money", "with pride", "with silver", "with sins", "with strength", "with vigor", "with wings", "without a conscience", "without a goal", "without a home", "without courage", "without desire", "without direction", "without duty", "without faith", "without fear", "without flaws", "without glory", "without hate", "without honor", "without hope", "without shame", "without sin", "without time"];
+        let bookTitle
+        function randint(a, b) {
+            return a + Math.floor(Math.random() * (b - a + 1))
+        }
+        function generateTitle() {
+            let t = String(topic.value)
+            if (t.length === 0) {
+                t = ""
+                let rd1 = randint(1, 5)
+                if (rd1 == 1) {
+                    rnd = Math.random() * names1.length | 0;
+                    rnd2 = Math.random() * names4.length | 0;
+                    t = names1[rnd] + " " + names4[rnd2];
+                }
+                else if (rd1 == 2) {
+                    rnd = Math.random() * names2.length | 0;
+                    rnd2 = Math.random() * names4.length | 0;
+                    t = names2[rnd] + " " + names4[rnd2];
+                }
+                else if (rd1 == 3) {
+                    rnd = Math.random() * names2.length | 0;
+                    rnd2 = Math.random() * names2.length | 0;
+                    t = names2[rnd] + " and " + names2[rnd2];
+                }
+                else if (rd1 == 4) {
+                    rnd = Math.random() * names3.length | 0;
+                    rnd2 = Math.random() * names7.length | 0;
+                    t = names3[rnd] + " " + names7[rnd2];
+                }
+                else {
+                    rnd = Math.random() * names5.length | 0;
+                    rnd2 = Math.random() * names6.length | 0;
+                    t = names5[rnd] + " " + names6[rnd2];
+                }
+            }
+            return t
+        }
+        let beginnings = [
+            "I read the {BOOK} during the Spring Festival, a very interesting book.",
+            "During the Spring Festival, I read the {BOOK}, which impressed me a lot.",
+            "During the Spring Festival, a book called {BOOK} caught my eyes, so I read it without hesitation.",
+            "{BOOK} is a fantastic book, and I read it during the Spring Festival.",
+            "During the Spring Festival of this year, I studied in novel {BOOK}, which is totally an eye feast."
+        ]
+
+        let endings = [
+            "Indeed, {BOOK} is worth reading. The next version of it is highly anticipated",
+            "The story makes us thinking about life and we learn much from the experience, at least, that is a fresh new recognition of the real beauty.",
+            "We also must study senior fisherman's spirit in life, handles the matter does not fear the difficulty, only then can obtain successfully."
+        ]
+        let words1 = [
+            "Tears are a kind of emotional release.",
+            "Crazy miss, where are you.",
+            "As long as you live better than me, die early.",
+            "Love like an idiot, worth it?",
+            "I want to love my seal in your heart.",
+            "You are my life, I can't live without you.",
+            "Carrying my full memory, you're far away.",
+            "Not because of my persistence, but because you deserve it.",
+            "Happy to know how to share, to be more happy.",
+            "I will not beat you, you don't know me but.",
+            "Broken the promise of a place, put together not back yesterday.",
+            "Some things, do not say is a knot, say is a scar.",
+            "There is no love in my world, it's meant to be apart.",
+            "I just want to find a person I can manage.",
+            "A ray of sunshine in the morning, woke me from my sleep.",
+            "I just don't want to leave you, I don't want to.",
+            "If the outcome is bound to be sad, then I would rather choose to give up.",
+            "I gave it back to you, and I found it really easy.",
+            "The fickleness of the world I have to make myself disguised as a hedgehog.",
+            "I have heard the most ridiculous story, is you and her love.",
+            "Turning only to meet you, but you forget, you will turn.",
+            "I want to hold your hand, walk, escape from the planet.",
+            "The whole world can be yours, but you can only be mine.",
+            "I began to learn to imagine, the idea of a place where you and I.",
+            "Every second that you are touching, it's always in my life.",
+            "Time is not to let people forget the pain, it just makes people used to pain.",
+            "Tangle of love, is that you have to let me choose to smile to leave.",
+            "Whether it is to leave or to get together, always so painful."
+        ]
+        let words2 = [
+            "A young idler, an old beggar. ",
+            "Too many cooks spoil the broth.",
+            "You can't judge a book by its cover.",
+            "All good things came to an end.",
+            "The early bird catches the worm.",
+            "There's no such thing as a free lunch.",
+            "Practice makes perfect. ",
+            "There is no royal road to learning.",
+            "It is never too old to learn.",
+            "A man becomes learned by asking questions.",
+            "Absence makes the heart grow fonder.",
+            "When the cat is away, the mice will play.",
+            "No cross, no crown.",
+            "Ill news travels fast.",
+            "He that climbs high falls heavily.",
+            "From saving comes having.",
+            "Experience is the mother of wisdom.",
+            "East or west, home is best.",
+            "Don't keep all your eggs in one basketball.",
+            "Don't teach your grandmother to suck eggs.",
+            "Don't trouble trouble until trouble troubles you.",
+            "Doing is better than saying.",
+            "Birds of a feather flock together.",
+            "Barking dogs seldom bite.",
+            "Bad news has wings.",
+            "As the tree, so the fruit.",
+            "An idle youth, a needy age.",
+            "A good wife makes a good husband.",
+            "A good medicine tastes bitter.",
+            "A good beginning makes a good ending."
+        ]
+        let words3 = [
+            "The novel description is one year near sixty years of age senior fisherman, when alone goes to sea in one fishing, fished one big fish, actually did not pull",
+            "The senior fisherman socialized several days after the fish, only then discovered this was the big marlin which one surpassed the oneself fishing boat several fold, although knew perfectly well very difficult to win, but still did not give up",
+            "Afterwards and further because in the big marlin wound fish fishy smell brought in several crowds of shark fish snatches the food, but the old person still did not hope like this to give up, finally highlighted encircles tightly, returned to the big fish belt the fishing port, lets other fishermen not admire already",
+            "When I read the senior fisherman think: Here to the seacoast really was too near, perhaps could have a bigger fish in a farther place", "When, I extremely admire this senior fisherman, because he by now already projected on some fish, but he had not settled to the present situation, but was approaches the bigger goal advance",
+            "Again has a look us, usually meets one slightly is difficult, we all complain incessantly",
+            "We will be the motherland future, will be supposed to like this old person same mind lofty aspiration, will even better pursue even better, the bigger goal",
+            "When I read the big marlin start fast to gather round the young fishing boat hover, twined the cable on the mast, the old person right hand lifted up high the steel fork, leapt the water surface in it the flash, did utmost throws to its heart, one wail ended the big fish's life, it was static static floats on the water surface",
+            "When, my heart also liked together the big stone falls",
+            "I extremely admire old person that kind do not dread, the relentless spirit, although knows the match strength is very strong, but he not slightly flinches, but is welcomes difficultly above",
+            "Just because had this kind of spirit, the senior fisherman only then achieved this life and death contest success",
+            "We also must study senior fisherman's spirit in life, handles the matter does not fear the difficulty, only then can obtain successfully",
+            "Ever find the grind of life getting you down? Is the day-to-day struggle threatening to drag you under? If so, there is a movie out there that can replenish your energy and refresh your outlook",
+            " Passionate and magical, Forrest Gump is a tonic for the weary of spirit",
+            " For those who feel that being set adrift in a season of action movies is like wandering into a desert, the oasis lies ahead",
+            "Forrest Gump who is unfortunately to be born with a lower IQ and the muscle problem, usually, people always think this kind of person can\"t be successful in doing anything",
+            " But, instead, this unlucky man has achieved lots of incredible success, he is a football star, a war hero, and later a millionaire!In the contention of the best picture of the 67th Oscar Award in 1995, film Have got six Grand Prixes , such as the best picture , the best actor , the best achievement in directing , adapting drama , the best achievement in film editing and the best visual effect bestly ,etc",
+            " at one blow ",
+            " The film was passed to a intellectual disturbance person the description of life has reflected every aspect of USA's life, important incident of social political life make and represent to these decades such as U,S.A. from one unique angle",
+            " Film adapt Winston novel of the same name of Groom since",
+            "Forrest Gump mould incarnation of virtue is honest keeping one\"s word , conscientiously , brave paying attention to emotioning among film",
+            " In the film, Forrest Gump is a very pure image, but Jenny has become the degenerate symbol",
+            " And write the great discrepancy originally in this",
+            " To all that narrated, since beginning all behave with a kind of tender feeling and well-meaning attitude after all for the film, having even joined poesy composition, this makes the film seem soft and have no injury",
+            " The film advocates to traditional moral concept and embodiment",
+            " Make film apt to accept by people, director superb lay out skill and film application of language make the film very attractive too",
+            " Succewith commercial for film content of the film has given security, and the treatment on director\"s art makes the film more excellent, this is reason that the film succeeds",
+            " It was the box-office hits the most in that year to become USA in {BOOK}",
+            "Tom Hanks very much sincere naturally performance having among film",
+            " He has obtained the laurel of the best actor of Oscar for the behavior in this film",
+            " This second movie emperor\"s money already whom he obtained in succession looks like",
+            " Succeof {BOOK}, make Tom Hanks become one of the most popular movie stars in Hollywood too",
+            " To Tom Hanks, those two years are the luckiest period of time in his performing art careers ","Jane Eyre, living in an orphaned, happy environment, grew up under treatment with peers, abandoned aunt, cousin of contempt, insults and beatings cousin the ruthless trample on a child's dignity, but perhaps it is because of all this, Jane love unlimited confidence and a firm and inflexible spirit, which can overcome the inherent personality","Unfortunately, in the study life, Jane"," Love is still suffering from corporal punishment and mental disability"," School donor rocor Hearst not only when all the teachers and students face to defame her and put her shame on the stage show"," She was ashamed in front of the whole school"," But Jane"," Love is firm and inflexible, turn grief into strength, not only the rapid progress in learning, but also made the teachers and students to understand", "Love has fallen into the whirlpool of love"," Her strong personality and also keep personal dignity, is great lady rival in front, favorably, overbearing for miss Ingram, she was calm in the face"," Similarly, in front of Rochester, she never because he is an inferior status of the family teachers feel inferior, she thinks they are equal"," It should not be because she is a servant, but not to be respected by others"," It is also because of her integrity, noble and pure, the soul is not polluted by the secular society"," Rochester zican are made of dirty, at the same time respect for her and deeply in love with her"," He was sincere and moved her, and she accepted him"," Later, Jane"," Love found that Rochester had a wife, her self-esteem again appeared, without hesitation, she left him, her love for the exclusive, let me admire","The ending of the novel is perfectly happy"," Although the manor of Rochester was destroyed by his mad wife, his eyes were blind, and became a disabled person"," But this is the fact that Jane is no longer in contradiction between dignity and love, but at the same time, he is happy","The novel tells us that the most wonderfull life is human dignity and love, I really appreciate the author of this wonderful life ideal - is the dignity and love, after all, in today's society, the person's value = dignity + love this formula to pay to achieve often cannot do without the help of money"," Choose between rich and poor, choose between love and no love"," Few people will abandon everything for love, like Jane, and do not care","In the face of setbacks, we should have a \"thousand mill strike\" ambition, as long as there is hope, do not give up, stand up, continue to move forward, because, after all the journey to buy a return ticket"," The test of thousands of setbacks has created our persistent character, molded our strong will and trained our excellent skills and paved the way for us to succeed"," In the setback, we have a little bit of strength, step by step to the glory"," Let us full of \"fate by the throat\" of the lofty sentiments and aspirations to challenge setbacks, overcome setbacks!","In the novel， though the young Oliver again and again fell for conspiracies of those hideous thieves， who tried to torture Oliver’s body and poisoned Oliver’s heart intensely， he always lived on and tried hard to seek for his own life"," Then I realized what supported him all through were actually beliefs"," In most cases， what you believe is what you’ll bee"," Believe that you are unlimited， that you can do anything you mit to doing， and when you do， your acplishments will know no bounds"," You control your beliefs and that is how you ultimately control your life"," It’s all dictated by your attitude","In the final analysis， love and care contain numerous forms， there are love of forgiveness， love of trust， etc"," but they all e from your beliefs in life"," When someone tells you he’s deceived you， forgive him anyway， when someone tells you what he’s done， trust him anyway， and when you face adversities while chasing your dreams， think about your beliefs， then what hinders you will bee a piece of cake in no time","So find out “Olivers” in your life and do as Mr"," Brownlow and Mrs"," Maylie do: love them and care them， which cost nothing but save much"," They enrich those who receive， without impoverishing those who give","They can be certain smallest words or actions， but the memory of them sometimes last forever","Charles Dickens said:“Love makes the world go around","” These immortal words have inspired and will keep on inspiring us to chant the melody of love and to say the prayer of care forevermore"," Let us， therefore， enjoy life and treat other people lovingly"," These principles are the roots and foundations of beliefs supporting this article and our mission together","I was really move by Jane Erye after closing the book","What a kind and good woman!Mrs Eyre had a heart of gold","She really loved everyone around her,and gave others help sincerely","She respected herself and did her best to do everything","I really love her","She are both a great teacher and a good friend of mine","Sometimes when I am confuse,I will think of her","I will imagine what will she do if she is I","Why not read Jane Erye my friends!"
+        ]
+        function chooseOne(t) {
+            return t[randint(0, t.length - 1)].replace(/\{BOOK\}/g, bookTitle)
+        }
+        function gen() {
+            let essayLen = 500
+            resultContainer.style.display = "block"
+            bookTitle = "&lt;" + generateTitle() + "&gt;"
+            result.innerHTML = ""
+            result.innerHTML += "<h2>Impressions from reading " + bookTitle + "</h2>"
+            let beginning = chooseOne(beginnings)
+            result.innerHTML += "<p>" + beginning + "</p>"
+            let words = 0
+            let paralen = 0
+            let para = ""
+            while (words < essayLen) {
+                let rd = randint(1, 100)
+                if (rd < 15) {
+                    let sent = "As the saying goes, \"" + chooseOne(words2) + "\"."
+                    para += sent
+                    paralen += sent.split(" ").length
+                    words += sent.split(" ").length
+                }
+                else if (rd < 40) {
+                    let sent = chooseOne(words1)
+                    para += sent
+                    paralen += sent.split(" ").length
+                    words += sent.split(" ").length
+                }
+                else {
+                    let sent = chooseOne(words3) + "."
+                    para += sent
+                    paralen += sent.split(" ").length
+                    words += sent.split(" ").length
+                }
+                if (paralen > 100) {
+                    result.innerHTML += "<p>" + para + "</p>"
+                    paralen = 0
+                    para = ""
+                }
+            }
+            let ending = chooseOne(endings)
+            result.innerHTML += "<p>" + ending + "</p>"
+        }
+        genButton.addEventListener("click", () => {
+            gen()
+        })
+    </script>
+</body>
+
+
+</html>
